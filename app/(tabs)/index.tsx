@@ -1,74 +1,85 @@
-import { Image, StyleSheet, Platform } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, StyleSheet, ActivityIndicator, Alert } from 'react-native';
+import InputBox from '../../components/InputBox';    // Adjust based on your project structure
+import OutputBox from '../../components/OutputBox';
 
-import { HelloWave } from '@/components/HelloWave';
-import ParallaxScrollView from '@/components/ParallaxScrollView';
-import { ThemedText } from '@/components/ThemedText';
-import { ThemedView } from '@/components/ThemedView';
+const API_KEY = "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"; // 🛑 Put your real OpenRouter API key here
 
-export default function HomeScreen() {
+const generatePrompt = async (userInput: string): Promise<string> => {
+  try {
+    const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${API_KEY}`,
+        'Content-Type': 'application/json',
+        'HTTP-Referer': 'https://your-app.com/', // optional
+        'X-Title': 'Prompt Generator App'
+      },
+      body: JSON.stringify({
+        model: "google/gemini-2.5-pro-preview-03-25",
+        messages: [
+          { role: "system", content: "You are an expert prompt engineer." },
+          { role: "user", content: `Create a great prompt based on: ${userInput}` }
+        ]
+      })
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to fetch from LLM API');
+    }
+
+    const data = await response.json();
+    return data.choices[0].message.content.trim();
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
+
+const HomeScreen = () => {
+  const [userInput, setUserInput] = useState<string>('');
+  const [generatedPrompt, setGeneratedPrompt] = useState<string>('');
+  const [loading, setLoading] = useState<boolean>(false);
+
+  const handleGenerate = async () => {
+    if (!userInput.trim()) {
+      Alert.alert('Input required', 'Please enter a topic first.');
+      return;
+    }
+    try {
+      setLoading(true);
+      const prompt = await generatePrompt(userInput);
+      setGeneratedPrompt(prompt);
+    } catch (error) {
+      Alert.alert('Error', 'Something went wrong while generating the prompt.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-      headerImage={
-        <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
-        />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
-          Press{' '}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({
-              ios: 'cmd + d',
-              android: 'cmd + m',
-              web: 'F12'
-            })}
-          </ThemedText>{' '}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-        <ThemedText>
-          Tap the Explore tab to learn more about what's included in this starter app.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          When you're ready, run{' '}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
-      </ThemedView>
-    </ParallaxScrollView>
+    <View style={styles.container}>
+      <Text style={styles.title}>Prompt Generator</Text>
+
+      <InputBox
+        userInput={userInput}
+        setUserInput={setUserInput}
+        handleGenerate={handleGenerate}
+      />
+
+      {loading ? (
+        <ActivityIndicator size="large" color="#007bff" style={styles.loader} />
+      ) : (
+        <OutputBox generatedPrompt={generatedPrompt} />
+      )}
+    </View>
   );
-}
+};
+
+export default HomeScreen;
 
 const styles = StyleSheet.create({
-  titleContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-  },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
-  },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: 'absolute',
-  },
+  container: { flex: 1, padding: 20, justifyContent: 'center', backgroundColor: '#fff' },
+  title: { fontSize: 24, fontWeight: 'bold', textAlign: 'center', marginBottom: 20 },
+  loader: { marginTop: 20 }
 });
