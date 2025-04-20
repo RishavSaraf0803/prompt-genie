@@ -1,50 +1,65 @@
-# Welcome to your Expo app 👋
+# Prompt Genie
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+Prompt Genie is a simple and powerful mobile app built with React Native.  
+It helps users quickly generate high-quality prompts for various use-cases and allows easy copying for use in other apps like ChatGPT.
 
-## Get started
+---
 
-1. Install dependencies
+## ✨ Features
 
-   ```bash
-   npm install
-   ```
+- 🧠 Generate AI prompts from your own topics
+- 📋 Copy generated prompts to clipboard
+- 🗑️ Clear the output with a single tap
+- 📱 Clean and minimal mobile UI
+- 🚀 Fast and responsive performance
 
-2. Start the app
+---
 
-   ```bash
-    npx expo start
-   ```
+## 🛠 Tech Stack
 
-In the output, you'll find options to open the app in a
+- React Native CLI
+- TypeScript
+- @react-native-clipboard/clipboard
+- OpenRouter API (optional for real LLM integration)
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+---
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+## 📸 Screenshots
 
-## Get a fresh project
+*(You can add your screenshots here after uploading images)*
 
-When you're ready, run:
+---
 
+## 🔥 Getting Started
+
+### 1. Clone the repository
 ```bash
-npm run reset-project
-```
+git clone https://github.com/RishavSaraf0803/prompt-genie.git
+cd prompt-genie
+2. Install dependencies
+bash
+Copy
+Edit
+npm install
+3. Run on Android
+bash
+Copy
+Edit
+npx react-native run-android
+(For iOS: install pods first npx pod-install ios then npx react-native run-ios)
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+🚀 Future Enhancements
+Connect real OpenAI / OpenRouter LLM for smarter prompts
 
-## Learn more
+Save prompt history
 
-To learn more about developing your project with Expo, look at the following resources:
+Share prompts directly to WhatsApp, Telegram, etc.
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+Add animation and better UX
 
-## Join the community
+🤝 Contribution
+Contributions, issues and feature requests are welcome!
+Feel free to open an issue or submit a pull request.
 
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+📜 License
+This project is open source under the MIT License.
